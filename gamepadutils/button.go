@@ -4,9 +4,9 @@ import "github.com/Zyko0/go-sdl3/sdl"
 
 // GamepadButton is a UI button widget with 9-slice background rendering.
 type GamepadButton struct {
-	renderer        *sdl.Renderer
-	background      *sdl.Texture
-	backgroundWidth float32
+	renderer         *sdl.Renderer
+	background       *sdl.Texture
+	backgroundWidth  float32
 	backgroundHeight float32
 
 	area sdl.FRect

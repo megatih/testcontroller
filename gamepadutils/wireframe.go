@@ -68,8 +68,8 @@ func ProjectVec3ToRect(v *Vector3, rect *sdl.FRect) sdl.FPoint {
 	ndcY := (v.Y / relZ) / fovScaleY
 
 	return sdl.FPoint{
-		X: rect.X + (rect.W/2.0) + (ndcX * rect.W / 2.0),
-		Y: rect.Y + (rect.H/2.0) - (ndcY * rect.H / 2.0),
+		X: rect.X + (rect.W / 2.0) + (ndcX * rect.W / 2.0),
+		Y: rect.Y + (rect.H / 2.0) - (ndcY * rect.H / 2.0),
 	}
 }
 

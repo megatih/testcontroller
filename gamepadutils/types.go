@@ -94,7 +94,7 @@ type Quaternion struct {
 type EGyroCalibrationPhase int
 
 const (
-	GYRO_CALIBRATION_PHASE_OFF              EGyroCalibrationPhase = iota
+	GYRO_CALIBRATION_PHASE_OFF EGyroCalibrationPhase = iota
 	GYRO_CALIBRATION_PHASE_NOISE_PROFILING
 	GYRO_CALIBRATION_PHASE_DRIFT_PROFILING
 	GYRO_CALIBRATION_PHASE_COMPLETE

@@ -49,16 +49,16 @@ var gamepadAxisNames = []string{
 
 // GamepadDisplay shows the list of gamepad buttons and axes with their states.
 type GamepadDisplay struct {
-	renderer     *sdl.Renderer
+	renderer      *sdl.Renderer
 	buttonTexture *sdl.Texture
 	arrowTexture  *sdl.Texture
-	ButtonWidth  float32
-	ButtonHeight float32
-	arrowWidth   float32
-	arrowHeight  float32
+	ButtonWidth   float32
+	ButtonHeight  float32
+	arrowWidth    float32
+	arrowHeight   float32
 
-	accelData            [3]float32
-	gyroData             [3]float32
+	accelData               [3]float32
+	gyroData                [3]float32
 	GyroDriftCorrectionData [3]float32
 
 	lastSensorUpdate uint64

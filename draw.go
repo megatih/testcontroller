@@ -45,7 +45,7 @@ func DrawGamepadInfo(renderer *sdl.Renderer) {
 	if controller.Joystick != nil {
 		jid, _ := controller.Joystick.ID()
 		text := fmt.Sprintf("(%d)", jid)
-		x := SCREEN_WIDTH - (FONT_CHARACTER_SIZE*float32(len(text))) - 8.0
+		x := SCREEN_WIDTH - (FONT_CHARACTER_SIZE * float32(len(text))) - 8.0
 		y := float32(8.0)
 		renderer.DebugText(x, y, text)
 	}

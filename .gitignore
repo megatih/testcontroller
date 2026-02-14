@@ -16,7 +16,7 @@ testcontroller
 go.work
 
 # Dependency directories
-vendor/
+# vendor/ - Commented out: we vendor dependencies with custom fixes
 
 # IDE and editor files
 .vscode/
@@ -38,3 +38,6 @@ Thumbs.db
 *.log
 *.tmp
 *.bak
+
+# Build output
+build/

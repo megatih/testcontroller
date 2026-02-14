@@ -219,6 +219,8 @@ The application supports PS5-specific features via `SendEffect()`:
 
 ## Building from Source
 
+### Quick Build
+
 ```bash
 # Clone repository
 git clone https://github.com/yourusername/testcontroller.git
@@ -235,6 +237,138 @@ go test ./...
 
 # Check code quality
 go vet ./...
+```
+
+### macOS Application Bundle
+
+For macOS, you can build a distributable .app bundle and DMG installer:
+
+#### Quick Reference
+
+```bash
+# Build the app
+./build.sh
+```
+
+**Output:**
+```
+build/
+├── TestController.app/              ← macOS application bundle
+└── TestController-1.0.0.dmg         ← Distributable disk image
+```
+
+**Test:**
+```bash
+open build/TestController.app        # Test the app
+open build/TestController-1.0.0.dmg  # Test the DMG
+```
+
+#### What's Included in the .app Bundle
+
+✅ Universal binary (Apple Silicon + Intel)
+✅ Self-contained SDL3 library (no Homebrew needed)
+✅ Custom app icon (from testcontroller_icon_1024.png)
+✅ All PNG assets for gamepad graphics
+✅ Gamepad controller database
+✅ Launcher script for proper resource loading
+✅ Info.plist with app metadata
+
+#### Distribution
+
+Share the DMG file with users:
+1. They open TestController-1.0.0.dmg
+2. Drag TestController.app to Applications folder
+3. Launch from Applications or Spotlight
+
+**No installation of SDL3 or other dependencies required!**
+
+#### Build Prerequisites (macOS)
+
+Before building the app bundle, ensure you have:
+
+1. **Go** (1.21 or later)
+   ```bash
+   brew install go
+   ```
+
+2. **SDL3** installed via Homebrew
+   ```bash
+   brew install sdl3
+   ```
+
+3. **Xcode Command Line Tools** (for `lipo`, `install_name_tool`, `hdiutil`)
+   ```bash
+   xcode-select --install
+   ```
+
+#### Build Process
+
+The `build.sh` script:
+1. ✅ Cleans previous builds
+2. ✅ Compiles universal binary (Apple Silicon + Intel)
+3. ✅ Creates `.app` bundle structure
+4. ✅ Copies executable and creates launcher
+5. ✅ Copies all resources (PNG assets, gamecontroller database)
+6. ✅ Creates app icon from `testcontroller_icon_1024.png` (if present)
+7. ✅ Bundles SDL3 library with proper linking
+8. ✅ Generates `Info.plist` with icon reference
+9. ✅ Creates distributable DMG file
+
+#### App Icon
+
+Place a 1024x1024 PNG icon file named `testcontroller_icon_1024.png` in the project root.
+The build script will automatically:
+- Generate all required icon sizes (16x16 to 512x512 @2x)
+- Create a proper macOS `.icns` file
+- Include it in the app bundle
+- Reference it in `Info.plist`
+
+If the icon file is not present, the build will continue without an icon.
+
+#### App Bundle Structure
+
+```
+TestController.app/
+└── Contents/
+    ├── Info.plist
+    ├── MacOS/
+    │   ├── testcontroller        # Launcher script
+    │   └── testcontroller-bin    # Actual binary
+    ├── Resources/
+    │   ├── AppIcon.icns          # Application icon
+    │   └── assets/
+    │       ├── *.png             # Gamepad graphics
+    │       └── gamecontrollerdb.txt
+    └── Frameworks/
+        └── libSDL3.dylib         # Bundled SDL3
+```
+
+#### Customization
+
+You can customize the build by editing `build.sh` variables:
+
+```bash
+APP_NAME="TestController"                      # Application name
+APP_VERSION="1.0.0"                            # Version number
+BUNDLE_ID="com.megatih.testcontroller"         # Bundle identifier
+DMG_NAME="${APP_NAME}-${APP_VERSION}"          # DMG filename
+```
+
+#### Code Signing (Optional)
+
+For public distribution, you may want to code sign:
+
+```bash
+codesign --deep --force --sign "Developer ID Application: Your Name" \
+    build/TestController.app
+```
+
+Then notarize with Apple for Gatekeeper:
+```bash
+xcrun notarytool submit build/TestController-1.0.0.dmg \
+    --apple-id your@email.com \
+    --password "app-specific-password" \
+    --team-id TEAMID
 ```
 
 ## Troubleshooting
@@ -258,6 +392,56 @@ Error: Failed to load SDL3 library
 
 ### Gyro Calibration Fails
 **Solution**: Place controller on a completely flat, stable surface during calibration
+
+## Development Notes
+
+### Vendored go-sdl3 Fixes
+
+This project vendors the go-sdl3 dependency and applies fixes to unimplemented methods.
+
+#### Working Fixes (Applied)
+
+1. **`Gamepad.TouchpadFinger()`** - `vendor/github.com/Zyko0/go-sdl3/sdl/methods.go:2708`
+   - **Fix**: Removed `panic("not implemented")`
+   - **Status**: ✅ Working - Touchpad finger tracking now functional
+
+2. **`Gamepad.SensorData()`** - `vendor/github.com/Zyko0/go-sdl3/sdl/methods.go:2742`
+   - **Fix**: Removed `panic("not implemented")`
+   - **Status**: ✅ Working - Accelerometer and gyro data now accessible
+
+#### Known Issues (Not Fixed)
+
+3. **`JoystickID.JoystickGUIDForID()`** and **`Joystick.GUID()`**
+   - **Issue**: GUID struct-return ABI incompatibility with purego
+   - **Impact**: GUID display disabled in verbose logging (non-critical)
+   - **Technical**: SDL3 returns `SDL_GUID` structs by value (16 bytes), but purego's `SyscallN` expects pointer returns, resulting in invalid memory access
+
+#### What Works
+
+- ✅ Touchpad finger position tracking
+- ✅ Touchpad finger pressure detection
+- ✅ Accelerometer sensor data (3-axis)
+- ✅ Gyroscope sensor data (3-axis)
+- ✅ All button/axis/hat inputs
+- ✅ Controller connection/disconnection
+- ❌ GUID display (not critical for functionality)
+
+#### Updating go-sdl3
+
+If you need to update go-sdl3 in the future:
+
+1. Update go.mod version
+2. Run `go mod vendor`
+3. Re-apply these fixes to `vendor/github.com/Zyko0/go-sdl3/sdl/methods.go`:
+   - Remove panic from `TouchpadFinger()` (line ~2708)
+   - Remove panic from `SensorData()` (line ~2742)
+   - Keep panic in GUID methods with explanation
+
+#### Future Upstream Contribution
+
+The `TouchpadFinger` and `SensorData` fixes should be submitted as a PR to [Zyko0/go-sdl3](https://github.com/Zyko0/go-sdl3).
+
+The GUID issue requires deeper changes to handle struct-by-value returns in purego, which may need upstream purego library support or special handling in go-sdl3.
 
 ## Contributing
 

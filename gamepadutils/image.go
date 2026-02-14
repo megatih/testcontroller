@@ -95,27 +95,27 @@ type GamepadImage struct {
 	buttonTexture     *sdl.Texture
 	axisTexture       *sdl.Texture
 
-	gamepadWidth  float32
-	gamepadHeight float32
-	faceWidth     float32
-	faceHeight    float32
+	gamepadWidth     float32
+	gamepadHeight    float32
+	faceWidth        float32
+	faceHeight       float32
 	connectionWidth  float32
 	connectionHeight float32
-	batteryWidth  float32
-	batteryHeight float32
-	touchpadWidth  float32
-	touchpadHeight float32
-	ButtonWidth   float32
-	ButtonHeight  float32
-	AxisWidth     float32
-	AxisHeight    float32
+	batteryWidth     float32
+	batteryHeight    float32
+	touchpadWidth    float32
+	touchpadHeight   float32
+	ButtonWidth      float32
+	ButtonHeight     float32
+	AxisWidth        float32
+	AxisHeight       float32
 
-	x, y          float32
-	showingFront  bool
+	x, y            float32
+	showingFront    bool
 	showingTouchpad bool
-	gamepadType   sdl.GamepadType
-	eastLabel     sdl.GamepadButtonLabel
-	displayMode   ControllerDisplayMode
+	gamepadType     sdl.GamepadType
+	eastLabel       sdl.GamepadButtonLabel
+	displayMode     ControllerDisplayMode
 
 	elements [SDL_GAMEPAD_ELEMENT_MAX]bool
 

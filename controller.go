@@ -32,10 +32,10 @@ type AxisState struct {
 type Controller struct {
 	ID sdl.JoystickID
 
-	Joystick  *sdl.Joystick
-	NumAxes   int
+	Joystick   *sdl.Joystick
+	NumAxes    int
 	AxisStates []AxisState
-	IMUState  *IMUState
+	IMUState   *IMUState
 
 	Gamepad     *sdl.Gamepad
 	Mapping     string
@@ -51,16 +51,16 @@ type DS5EffectsState struct {
 	data [47]byte
 }
 
-func (e *DS5EffectsState) setEnableBits1(v byte)                   { e.data[0] |= v }
-func (e *DS5EffectsState) setEnableBits2(v byte)                   { e.data[1] |= v }
-func (e *DS5EffectsState) setRumbleRight(v byte)                   { e.data[2] = v }
-func (e *DS5EffectsState) setRumbleLeft(v byte)                    { e.data[3] = v }
-func (e *DS5EffectsState) setHeadphoneVolume(v byte)               { e.data[4] = v }
-func (e *DS5EffectsState) setSpeakerVolume(v byte)                 { e.data[5] = v }
-func (e *DS5EffectsState) setMicrophoneVolume(v byte)              { e.data[6] = v }
-func (e *DS5EffectsState) setAudioEnableBits(v byte)               { e.data[7] = v }
-func (e *DS5EffectsState) setRightTriggerEffect(data [11]byte)     { copy(e.data[10:21], data[:]) }
-func (e *DS5EffectsState) setLeftTriggerEffect(data [11]byte)      { copy(e.data[21:32], data[:]) }
+func (e *DS5EffectsState) setEnableBits1(v byte)               { e.data[0] |= v }
+func (e *DS5EffectsState) setEnableBits2(v byte)               { e.data[1] |= v }
+func (e *DS5EffectsState) setRumbleRight(v byte)               { e.data[2] = v }
+func (e *DS5EffectsState) setRumbleLeft(v byte)                { e.data[3] = v }
+func (e *DS5EffectsState) setHeadphoneVolume(v byte)           { e.data[4] = v }
+func (e *DS5EffectsState) setSpeakerVolume(v byte)             { e.data[5] = v }
+func (e *DS5EffectsState) setMicrophoneVolume(v byte)          { e.data[6] = v }
+func (e *DS5EffectsState) setAudioEnableBits(v byte)           { e.data[7] = v }
+func (e *DS5EffectsState) setRightTriggerEffect(data [11]byte) { copy(e.data[10:21], data[:]) }
+func (e *DS5EffectsState) setLeftTriggerEffect(data [11]byte)  { copy(e.data[21:32], data[:]) }
 
 func CyclePS5AudioRoute(device *Controller) {
 	device.AudioRoute = (device.AudioRoute + 1) % 4
@@ -254,12 +254,13 @@ func HandleGamepadAdded(id sdl.JoystickID, verbose bool) {
 	if verbose {
 		name := gamepad.Name()
 		path := gamepad.Path()
-		guid := guidToString(id.JoystickGUIDForID())
+		// Note: GUID methods have ABI issues with struct-return in purego bindings
+		// See: https://github.com/Zyko0/go-sdl3/issues
 		pathStr := ""
 		if path != "" {
 			pathStr = ", " + path
 		}
-		log.Printf("Opened gamepad %s, guid %s%s", name, guid, pathStr)
+		log.Printf("Opened gamepad %s%s", name, pathStr)
 
 		fw := gamepad.FirmwareVersion()
 		if fw != 0 {

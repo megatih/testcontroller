@@ -13,17 +13,17 @@ type GyroDisplay struct {
 
 	Area sdl.FRect
 
-	GyroDriftSolution    [3]float32
-	ReportedSensorRateHz int
+	GyroDriftSolution      [3]float32
+	ReportedSensorRateHz   int
 	nextReportedSensorTime uint64
 
-	EstimatedSensorRateHz          int
-	EulerDisplacementAngles        [3]float32
-	GyroQuaternion                 Quaternion
-	CurrentCalibrationPhase        EGyroCalibrationPhase
+	EstimatedSensorRateHz            int
+	EulerDisplacementAngles          [3]float32
+	GyroQuaternion                   Quaternion
+	CurrentCalibrationPhase          EGyroCalibrationPhase
 	CalibrationPhaseProgressFraction float32
-	AccelerometerNoiseSq           float32
-	AccelerometerNoiseToleranceSq  float32
+	AccelerometerNoiseSq             float32
+	AccelerometerNoiseToleranceSq    float32
 
 	ResetGyroButton     *GamepadButton
 	CalibrateGyroButton *GamepadButton
@@ -36,8 +36,8 @@ func CreateGyroDisplay(renderer *sdl.Renderer) *GyroDisplay {
 		GyroQuaternion:                Quaternion{X: 0, Y: 0, Z: 0, W: 1},
 		CurrentCalibrationPhase:       GYRO_CALIBRATION_PHASE_OFF,
 		AccelerometerNoiseToleranceSq: ACCELEROMETER_NOISE_THRESHOLD,
-		ResetGyroButton:              CreateGamepadButton(renderer, "Reset View"),
-		CalibrateGyroButton:          CreateGamepadButton(renderer, "Recalibrate Drift"),
+		ResetGyroButton:               CreateGamepadButton(renderer, "Reset View"),
+		CalibrateGyroButton:           CreateGamepadButton(renderer, "Recalibrate Drift"),
 	}
 	return ctx
 }

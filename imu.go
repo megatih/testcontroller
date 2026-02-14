@@ -19,9 +19,9 @@ const (
 
 // IMUState holds per-controller IMU state.
 type IMUState struct {
-	GyroPacketNumber         uint64
+	GyroPacketNumber          uint64
 	AccelerometerPacketNumber uint64
-	IMUPacketCounter         uint64
+	IMUPacketCounter          uint64
 
 	StartingTimeStampNS    uint64
 	IMUEstimatedSensorRate uint16
@@ -37,8 +37,8 @@ type IMUState struct {
 
 	GyroDriftAccumulator [3]float32
 
-	CalibrationPhase              gamepadutils.EGyroCalibrationPhase
-	CalibrationPhaseStartTimeNS   uint64
+	CalibrationPhase            gamepadutils.EGyroCalibrationPhase
+	CalibrationPhaseStartTimeNS uint64
 
 	GyroDriftSampleCount int
 	GyroDriftSolution    [3]float32

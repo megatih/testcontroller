@@ -13,16 +13,16 @@ import (
 
 // Global state matching testcontroller.c static variables.
 var (
-	window   *sdl.Window
-	screen   *sdl.Renderer
-	done     bool
-	setLED   bool
+	window *sdl.Window
+	screen *sdl.Renderer
+	done   bool
+	setLED bool
 
-	displayMode    = gamepadutils.CONTROLLER_MODE_TESTING
-	image          *gamepadutils.GamepadImage
-	gamepadElements *gamepadutils.GamepadDisplay
-	gyroElements   *gamepadutils.GyroDisplay
-	gamepadType    *gamepadutils.GamepadTypeDisplay
+	displayMode      = gamepadutils.CONTROLLER_MODE_TESTING
+	image            *gamepadutils.GamepadImage
+	gamepadElements  *gamepadutils.GamepadDisplay
+	gyroElements     *gamepadutils.GyroDisplay
+	gamepadType      *gamepadutils.GamepadTypeDisplay
 	joystickElements *gamepadutils.JoystickDisplay
 
 	setupMappingButton *gamepadutils.GamepadButton
@@ -39,11 +39,11 @@ var (
 	controller        *Controller
 	mappingController sdl.JoystickID
 
-	bindingElement     = gamepadutils.SDL_GAMEPAD_ELEMENT_INVALID
-	lastBindingElement = gamepadutils.SDL_GAMEPAD_ELEMENT_INVALID
-	bindingFlow        bool
+	bindingElement       = gamepadutils.SDL_GAMEPAD_ELEMENT_INVALID
+	lastBindingElement   = gamepadutils.SDL_GAMEPAD_ELEMENT_INVALID
+	bindingFlow          bool
 	bindingFlowDirection int
-	bindingAdvanceTime uint64
+	bindingAdvanceTime   uint64
 
 	titleArea        sdl.FRect
 	titleHighlighted bool
